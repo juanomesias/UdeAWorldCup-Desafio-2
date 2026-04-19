@@ -39,3 +39,32 @@ void Jugador::jugarMinutos(int minutos) {
     minutosJugados += minutos;
 }
 
+//Gttrs//
+const char* Jugador::getNombre() {
+    return nombre;
+}
+
+int Jugador::getGoles() {
+    return goles;
+}
+
+int Jugador::getAmarillas() {
+    return tarjetasAmarillas;
+}
+
+int Jugador::getRojas() {
+    return tarjetasRojas;
+}
+
+int Jugador::getMinutos() {
+    return minutosJugados;
+}
+
+//Mstrdts//
+void Jugador::mostrarDatos() {
+    cout << "Nombre: " << nombre << endl;
+    cout << "Goles: " << goles << endl;
+    cout << "Amarillas: " << tarjetasAmarillas << endl;
+    cout << "Rojas: " << tarjetasRojas << endl;
+    cout << "Minutos jugados: " << minutosJugados << endl;
+}

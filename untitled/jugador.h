@@ -22,6 +22,16 @@ public:
     void recibirRoja();
     void jugarMinutos(int minutos);
 
+    // Gttrs//
+    const char* getNombre();
+    int getGoles();
+    int getAmarillas();
+    int getRojas();
+    int getMinutos();
+
+    //Mstrinf//
+    void mostrarDatos();
+
 
 };
 
