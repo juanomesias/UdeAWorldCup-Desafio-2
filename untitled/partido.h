@@ -1,10 +1,7 @@
 #ifndef PARTIDO_H
 #define PARTIDO_H
 
-#include <string>
 #include "Equipo.h"
-
-using namespace std;
 
 class Partido {
 private:
@@ -14,21 +11,24 @@ private:
     int goles1;
     int goles2;
 
-    string fecha;
-    string sede;
+    char fecha[20];
+    char sede[50];
 
-    string arbitros[3];
+    char arbitros[3][20];
 
     float posesion1;
     float posesion2;
 
+    int generarRandom(int min, int max);
+    int calcularGolesEsperado(Equipo* A, Equipo* B);
+
 public:
-    void setArbitros(string a1, string a2, string a3);
+    Partido(Equipo* e1, Equipo* e2, const char* f, const char* s);
+
+    void setArbitros(const char* a1, const char* a2, const char* a3);
 
     void simular();
 
-    Equipo* getEquipo1();
-    Equipo* getEquipo2();
     int getGoles1();
     int getGoles2();
     Equipo* getGanador();
