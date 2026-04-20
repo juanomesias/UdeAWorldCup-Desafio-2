@@ -6,13 +6,21 @@ using namespace std;
 //CNST//
 Jugador::Jugador() {
     nombre[0] = '\0';
+
+    numeroCamiseta = 0;
+
     goles = 0;
+    asistencias = 0;
+    faltas = 0;
+    partidosJugados = 0;
+
     tarjetasAmarillas = 0;
     tarjetasRojas = 0;
+
     minutosJugados = 0;
 }
 
-//STTNMB//
+//STTRS//
 void Jugador::setNombre(const char* n) {
     int i = 0;
     while (n[i] != '\0' && i < 49) {
@@ -22,9 +30,29 @@ void Jugador::setNombre(const char* n) {
     nombre[i] = '\0';
 }
 
-//MTDEST//
+void Jugador::setNumeroCamiseta(int num) {
+    numeroCamiseta = num;
+}
+
+//MTDOSJUGS//
 void Jugador::anotarGol() {
     goles++;
+}
+
+void Jugador::darAsistencia() {
+    asistencias++;
+}
+
+void Jugador::cometerFalta() {
+    faltas++;
+}
+
+void Jugador::jugarPartido() {
+    partidosJugados++;
+}
+
+void Jugador::jugarMinutos(int minutos) {
+    minutosJugados += minutos;
 }
 
 void Jugador::recibirAmarilla() {
@@ -35,17 +63,29 @@ void Jugador::recibirRoja() {
     tarjetasRojas++;
 }
 
-void Jugador::jugarMinutos(int minutos) {
-    minutosJugados += minutos;
-}
-
-//Gttrs//
+//GTTRS//
 const char* Jugador::getNombre() {
     return nombre;
 }
 
+int Jugador::getNumeroCamiseta() {
+    return numeroCamiseta;
+}
+
 int Jugador::getGoles() {
     return goles;
+}
+
+int Jugador::getAsistencias() {
+    return asistencias;
+}
+
+int Jugador::getFaltas() {
+    return faltas;
+}
+
+int Jugador::getPartidos() {
+    return partidosJugados;
 }
 
 int Jugador::getAmarillas() {
@@ -60,11 +100,18 @@ int Jugador::getMinutos() {
     return minutosJugados;
 }
 
-//Mstrdts//
+//MSTRDTS//
 void Jugador::mostrarDatos() {
     cout << "Nombre: " << nombre << endl;
+    cout << "Numero de camiseta: " << numeroCamiseta << endl;
+
     cout << "Goles: " << goles << endl;
-    cout << "Amarillas: " << tarjetasAmarillas << endl;
-    cout << "Rojas: " << tarjetasRojas << endl;
+    cout << "Asistencias: " << asistencias << endl;
+    cout << "Faltas: " << faltas << endl;
+    cout << "Partidos jugados: " << partidosJugados << endl;
+
+    cout << "Tarjetas amarillas: " << tarjetasAmarillas << endl;
+    cout << "Tarjetas rojas: " << tarjetasRojas << endl;
+
     cout << "Minutos jugados: " << minutosJugados << endl;
 }
