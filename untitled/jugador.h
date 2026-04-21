@@ -17,6 +17,12 @@ public:
     //CNST//
     Jugador();
 
+    //Constructor de copia//(Ultima actualizacion)
+    Jugador(const Jugador& otro);
+
+    //Operador de asignacion//Ultima actualizacion)
+    Jugador& operator=(const Jugador& otro);
+
     //STTNMB//
     void setNombre(const char* n);
     void setNumeroCamiseta(int num);
@@ -50,3 +56,5 @@ public:
 };
 
 #endif
+
+

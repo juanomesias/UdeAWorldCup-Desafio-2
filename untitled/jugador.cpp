@@ -3,21 +3,58 @@
 
 using namespace std;
 
-//CNST//
-Jugador::Jugador() {
+Jugador::Jugador() {//constructor por defecto//
     nombre[0] = '\0';
-
     numeroCamiseta = 0;
-
     goles = 0;
     asistencias = 0;
     faltas = 0;
     partidosJugados = 0;
-
     tarjetasAmarillas = 0;
     tarjetasRojas = 0;
-
     minutosJugados = 0;
+}
+
+Jugador::Jugador(const Jugador& otro) {//constructor por copia//
+    // Copiar nombre manualmente
+    int i = 0;
+    while (otro.nombre[i] != '\0' && i < 49) {
+        nombre[i] = otro.nombre[i];
+        i++;
+    }
+    nombre[i] = '\0';
+
+    numeroCamiseta  = otro.numeroCamiseta;
+    goles           = otro.goles;
+    asistencias     = otro.asistencias;
+    faltas          = otro.faltas;
+    partidosJugados = otro.partidosJugados;
+    tarjetasAmarillas = otro.tarjetasAmarillas;
+    tarjetasRojas   = otro.tarjetasRojas;
+    minutosJugados  = otro.minutosJugados;
+}
+
+//Operador asignacion//
+Jugador& Jugador::operator=(const Jugador& otro) {
+    if (this == &otro) return *this;
+
+    int i = 0;
+    while (otro.nombre[i] != '\0' && i < 49) {
+        nombre[i] = otro.nombre[i];
+        i++;
+    }
+    nombre[i] = '\0';
+
+    numeroCamiseta    = otro.numeroCamiseta;
+    goles             = otro.goles;
+    asistencias       = otro.asistencias;
+    faltas            = otro.faltas;
+    partidosJugados   = otro.partidosJugados;
+    tarjetasAmarillas = otro.tarjetasAmarillas;
+    tarjetasRojas     = otro.tarjetasRojas;
+    minutosJugados    = otro.minutosJugados;
+
+    return *this;
 }
 
 //STTRS//
