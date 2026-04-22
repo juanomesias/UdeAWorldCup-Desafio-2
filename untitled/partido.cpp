@@ -30,6 +30,28 @@ Partido::Partido(Equipo* e1, Equipo* e2, const char* f, const char* s) {
     sede[i] = '\0';
 }
 
+int Partido::generarRandom(int min, int max) {
+    return min + rand() % (max - min + 1);
+}
+
+float Partido::randomPorcentaje() {
+    return (float)(rand() % 10000) / 100.0f;
+}
+
+void Partido::seleccionarConvocados(int seleccionados[], int total) {
+    bool usados[50] = {false};
+
+    for (int i = 0; i < 11; i++) {
+        int idx;
+        do {
+            idx = generarRandom(0, total - 1);
+        } while (usados[idx]);
+
+        usados[idx] = true;
+        seleccionados[i] = idx;
+    }
+}
+
 void Partido::setArbitros(const char* a1, const char* a2, const char* a3) {
     const char* arr[3] = {a1, a2, a3};
 
@@ -43,13 +65,9 @@ void Partido::setArbitros(const char* a1, const char* a2, const char* a3) {
     }
 }
 
-int Partido::generarRandom(int min, int max) {
-    return min + rand() % (max - min + 1);
-}
-
 int Partido::calcularGolesEsperados(Equipo* A, Equipo* B) {
-    float GF = A->getPromedioGolesFavor();
-    float GC = B->getPromedioGolesContra();
+    float GF = A->getGolesAFavor() / 10.0f;
+    float GC = B->getGolesEnContra() / 10.0f;
 
     float alpha = 0.6f;
     float beta = 0.4f;
@@ -73,6 +91,12 @@ void Partido::simular() {
         init = true;
     }
 
+    int convocados1[11];
+    int convocados2[11];
+
+    seleccionarConvocados(convocados1, equipo1->getCantidadJugadores());
+    seleccionarConvocados(convocados2, equipo2->getCantidadJugadores());
+
     goles1 = calcularGolesEsperados(equipo1, equipo2);
     goles2 = calcularGolesEsperados(equipo2, equipo1);
 
@@ -84,31 +108,84 @@ void Partido::simular() {
         posesion2 = 100 - posesion1;
     }
 
+    for (int i = 0; i < 11; i++) {
+        Jugador& j = equipo1->getJugador(convocados1[i]);
+        j.jugarMinutos(90);
+        j.jugarPartido();
+        if (randomPorcentaje() < 6.0f) {
+            j.recibirAmarilla();
+            if (randomPorcentaje() < 1.15f) {
+                j.recibirRoja();
+            }
+        }
+
+        if (randomPorcentaje() < 13.0f) {
+            j.cometerFalta();
+            if (randomPorcentaje() < 2.75f) {
+                j.cometerFalta();
+                if (randomPorcentaje() < 0.7f) {
+                    j.cometerFalta();
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < 11; i++) {
+        Jugador& j = equipo2->getJugador(convocados2[i]);
+        j.jugarMinutos(90);
+        j.jugarPartido();
+        if (randomPorcentaje() < 6.0f) {
+            j.recibirAmarilla();
+            if (randomPorcentaje() < 1.15f) {
+                j.recibirRoja();
+            }
+        }
+
+        if (randomPorcentaje() < 13.0f) {
+            j.cometerFalta();
+            if (randomPorcentaje() < 2.75f) {
+                j.cometerFalta();
+                if (randomPorcentaje() < 0.7f) {
+                    j.cometerFalta();
+                }
+            }
+        }
+    }
+
     for (int i = 0; i < goles1; i++) {
-        int idx = generarRandom(0, 25);
-        Jugador* j = equipo1->obtenerJugador(idx);
-        j->anotarGol();
-        j->jugarMinutos(90);
+        int idx = generarRandom(0, 10);
+        equipo1->getJugador(convocados1[idx]).anotarGol();
     }
 
     for (int i = 0; i < goles2; i++) {
-        int idx = generarRandom(0, 25);
-        Jugador* j = equipo2->obtenerJugador(idx);
-        j->anotarGol();
-        j->jugarMinutos(90);
+        int idx = generarRandom(0, 10);
+        equipo2->getJugador(convocados2[idx]).anotarGol();
     }
 
-    equipo1->actualizarEstadisticas(goles1, goles2);
-    equipo2->actualizarEstadisticas(goles2, goles1);
+    for (int i = 0; i < goles1; i++) {
+        equipo1->sumarGolAFavor();
+        equipo2->sumarGolEnContra();
+    }
+
+    for (int i = 0; i < goles2; i++) {
+        equipo2->sumarGolAFavor();
+        equipo1->sumarGolEnContra();
+    }
+
+    if (goles1 > goles2) {
+        equipo1->sumarGanado();
+        equipo2->sumarPerdido();
+    } else if (goles2 > goles1) {
+        equipo2->sumarGanado();
+        equipo1->sumarPerdido();
+    } else {
+        equipo1->sumarEmpatado();
+        equipo2->sumarEmpatado();
+    }
 }
 
-int Partido::getGoles1() {
-    return goles1;
-}
-
-int Partido::getGoles2() {
-    return goles2;
-}
+int Partido::getGoles1() { return goles1; }
+int Partido::getGoles2() { return goles2; }
 
 Equipo* Partido::getGanador() {
     if (goles1 > goles2) return equipo1;
@@ -117,5 +194,7 @@ Equipo* Partido::getGanador() {
 }
 
 void Partido::mostrarResultado() {
-    cout << "Resultado: " << goles1 << " - " << goles2 << endl;
+    cout << equipo1->getNombre() << " " << goles1
+         << " - " << goles2
+         << " " << equipo2->getNombre() << endl;
 }

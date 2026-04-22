@@ -20,6 +20,8 @@ private:
     float posesion2;
 
     int generarRandom(int min, int max);
+    float randomPorcentaje();
+    void seleccionarConvocados(int seleccionados[], int total);
     int calcularGolesEsperado(Equipo* A, Equipo* B);
 
 public:

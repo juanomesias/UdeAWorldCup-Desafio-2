@@ -1,10 +1,30 @@
 #ifndef GRUPO_H
 #define GRUPO_H
 
-class grupo
-{
+#include "Equipo.h"
+#include "Partido.h"
+
+class Grupo {
+private:
+    char letra;
+
+    Equipo* equipos[4];
+    Partido* partidos[6];
+
+    int puntos[4];
+
 public:
-    grupo();
+    Grupo(char l);
+
+    void agregarEquipo(int index, Equipo* eq);
+
+    void generarPartidos();
+
+    void simularGrupo();
+
+    void calcularTabla();
+
+    void mostrarTabla();
 };
 
-#endif // GRUPO_H
+#endif
