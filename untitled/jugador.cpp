@@ -1,154 +1,124 @@
+#include "jugador.h"
+#include <cstring>
 #include <iostream>
-#include "Jugador.h"
 
 using namespace std;
 
-Jugador::Jugador() {//constructor por defecto//
+jugador::jugador() {
+    nombre = new char[1];
     nombre[0] = '\0';
+
+    apellido = new char[1];
+    apellido[0] = '\0';
+
     numeroCamiseta = 0;
-    goles = 0;
-    asistencias = 0;
-    faltas = 0;
-    partidosJugados = 0;
-    tarjetasAmarillas = 0;
-    tarjetasRojas = 0;
-    minutosJugados = 0;
 }
 
-Jugador::Jugador(const Jugador& otro) {//constructor por copia//
-    // Copiar nombre manualmente
-    int i = 0;
-    while (otro.nombre[i] != '\0' && i < 49) {
-        nombre[i] = otro.nombre[i];
-        i++;
+jugador::jugador(const jugador& otro) {
+    if (otro.nombre) {
+        nombre = new char[strlen(otro.nombre) + 1];
+        strcpy(nombre, otro.nombre);
+    } else {
+        nombre = new char[1];
+        nombre[0] = '\0';
     }
-    nombre[i] = '\0';
 
-    numeroCamiseta  = otro.numeroCamiseta;
-    goles           = otro.goles;
-    asistencias     = otro.asistencias;
-    faltas          = otro.faltas;
-    partidosJugados = otro.partidosJugados;
-    tarjetasAmarillas = otro.tarjetasAmarillas;
-    tarjetasRojas   = otro.tarjetasRojas;
-    minutosJugados  = otro.minutosJugados;
+    if (otro.apellido) {
+        apellido = new char[strlen(otro.apellido) + 1];
+        strcpy(apellido, otro.apellido);
+    } else {
+        apellido = new char[1];
+        apellido[0] = '\0';
+    }
+
+    numeroCamiseta = otro.numeroCamiseta;
+    stats = otro.stats;
 }
 
-//Operador asignacion//
-Jugador& Jugador::operator=(const Jugador& otro) {
-    if (this == &otro) return *this;
+jugador::~jugador() {
+    delete[] nombre;
+    delete[] apellido;
+}
 
-    int i = 0;
-    while (otro.nombre[i] != '\0' && i < 49) {
-        nombre[i] = otro.nombre[i];
-        i++;
+jugador& jugador::operator=(const jugador& otro) {
+    if (this != &otro) {
+        delete[] nombre;
+        delete[] apellido;
+
+        if (otro.nombre) {
+            nombre = new char[strlen(otro.nombre) + 1];
+            strcpy(nombre, otro.nombre);
+        } else {
+            nombre = new char[1];
+            nombre[0] = '\0';
+        }
+
+        if (otro.apellido) {
+            apellido = new char[strlen(otro.apellido) + 1];
+            strcpy(apellido, otro.apellido);
+        } else {
+            apellido = new char[1];
+            apellido[0] = '\0';
+        }
+
+        numeroCamiseta = otro.numeroCamiseta;
+        stats = otro.stats;
     }
-    nombre[i] = '\0';
-
-    numeroCamiseta    = otro.numeroCamiseta;
-    goles             = otro.goles;
-    asistencias       = otro.asistencias;
-    faltas            = otro.faltas;
-    partidosJugados   = otro.partidosJugados;
-    tarjetasAmarillas = otro.tarjetasAmarillas;
-    tarjetasRojas     = otro.tarjetasRojas;
-    minutosJugados    = otro.minutosJugados;
-
     return *this;
 }
 
-//STTRS//
-void Jugador::setNombre(const char* n) {
-    int i = 0;
-    while (n[i] != '\0' && i < 49) {
-        nombre[i] = n[i];
-        i++;
-    }
-    nombre[i] = '\0';
+// GETTERS
+const char* jugador::getNombre() const { return nombre; }
+const char* jugador::getApellido() const { return apellido; }
+int jugador::getNumeroCamiseta() const { return numeroCamiseta; }
+estadisticasjugador& jugador::getStats() { return stats; }
+
+// SETTERS
+void jugador::setNombre(const char* valor) {
+    delete[] nombre;
+    nombre = new char[strlen(valor) + 1];
+    strcpy(nombre, valor);
 }
 
-void Jugador::setNumeroCamiseta(int num) {
-    numeroCamiseta = num;
+void jugador::setApellido(const char* valor) {
+    delete[] apellido;
+    apellido = new char[strlen(valor) + 1];
+    strcpy(apellido, valor);
 }
 
-//MTDOSJUGS//
-void Jugador::anotarGol() {
-    goles++;
+void jugador::setNumeroCamiseta(int valor) {
+    numeroCamiseta = valor;
 }
 
-void Jugador::darAsistencia() {
-    asistencias++;
+// FUNCIONES DEL DIAGRAMA
+void jugador::agregarGol() {
+    stats.goles++;
 }
 
-void Jugador::cometerFalta() {
-    faltas++;
+void jugador::agregarMinutos(int m) {
+    stats.minutos += m;
 }
 
-void Jugador::jugarPartido() {
-    partidosJugados++;
+void jugador::agregarTarjetaAmarilla() {
+    stats.amarillas++;
 }
 
-void Jugador::jugarMinutos(int minutos) {
-    minutosJugados += minutos;
+void jugador::agregarTarjetaRoja() {
+    stats.rojas++;
 }
 
-void Jugador::recibirAmarilla() {
-    tarjetasAmarillas++;
+void jugador::agregarFalta() {
+    stats.faltas++;
 }
 
-void Jugador::recibirRoja() {
-    tarjetasRojas++;
+// OPERADORES
+bool jugador::operator==(const jugador& otro) const {
+    return numeroCamiseta == otro.numeroCamiseta;
 }
 
-//GTTRS//
-const char* Jugador::getNombre() {
-    return nombre;
-}
-
-int Jugador::getNumeroCamiseta() {
-    return numeroCamiseta;
-}
-
-int Jugador::getGoles() {
-    return goles;
-}
-
-int Jugador::getAsistencias() {
-    return asistencias;
-}
-
-int Jugador::getFaltas() {
-    return faltas;
-}
-
-int Jugador::getPartidos() {
-    return partidosJugados;
-}
-
-int Jugador::getAmarillas() {
-    return tarjetasAmarillas;
-}
-
-int Jugador::getRojas() {
-    return tarjetasRojas;
-}
-
-int Jugador::getMinutos() {
-    return minutosJugados;
-}
-
-//MSTRDTS//
-void Jugador::mostrarDatos() {
-    cout << "Nombre: " << nombre << endl;
-    cout << "Numero de camiseta: " << numeroCamiseta << endl;
-
-    cout << "Goles: " << goles << endl;
-    cout << "Asistencias: " << asistencias << endl;
-    cout << "Faltas: " << faltas << endl;
-    cout << "Partidos jugados: " << partidosJugados << endl;
-
-    cout << "Tarjetas amarillas: " << tarjetasAmarillas << endl;
-    cout << "Tarjetas rojas: " << tarjetasRojas << endl;
-
-    cout << "Minutos jugados: " << minutosJugados << endl;
+ostream& operator<<(ostream& os, const jugador& j) {
+    os << "Camiseta: " << j.numeroCamiseta
+       << " | " << j.nombre << " " << j.apellido
+       << " | " << j.stats;
+    return os;
 }

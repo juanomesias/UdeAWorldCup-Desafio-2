@@ -1,80 +1,67 @@
 #ifndef EQUIPO_H
 #define EQUIPO_H
 
-#include "Jugador.h"
+#include "jugador.h"
 
-class Equipo {
+class equipo {
 private:
-    char nombre[50];
-    char directorTecnico[50];
-    char federacion[100];
-    char confederacion[50];
+    char* pais;
+    char* confederacion;
+    char* directorTecnico;
 
     int rankingFIFA;
 
-    int golesAFavor;
-    int golesEnContra;
-    int partidosGanados;
-    int partidosEmpatados;
-    int partidosPerdidos;
+    jugador* plantilla;
+    int numJugadores;
 
-    Jugador* jugadores;
-    int cantidadJugadores;
+    int puntos;
+    int diferenciaGoles;
 
-    // Funcion auxiliar interna para copiar cadenas sin usar strcpy
-    void copiarCadena(char* dest, const char* src, int maxLen);
+    // Stats históricas del equipo
+    struct estadisticasequipo {
+        int golesFavor = 0;
+        int golesContra = 0;
+        int partidosGanados = 0;
+        int partidosEmpatados = 0;
+        int partidosPerdidos = 0;
+    } statsHistoricas;
 
 public:
+    // Regla de los 3
+    equipo();
+    equipo(const equipo& otro);
+    ~equipo();
+    equipo& operator=(const equipo& otro);
 
-    Equipo();                               // Constructor por defecto (necesario para arrays)
-    Equipo(int n);                          // Constructor con cantidad de jugadores
-    Equipo(const Equipo& otro);             // Constructor de copia
-    Equipo& operator=(const Equipo& otro);  // Operador de asignacion
-    ~Equipo();                              // Destructor
+    // Getters
+    const char* getPais() const;
+    const char* getConfederacion() const;
+    const char* getDirectorTecnico() const;
+    int getRankingFIFA() const;
+    jugador* getPlantilla() const;
+    int getNumJugadores() const;
+    int getPuntos() const;
+    int getDiferenciaGoles() const;
+    estadisticasequipo& getStatsHistoricas();
 
-    //SETTERS//
-    void setNombre(const char* n);
-    void setDirector(const char* d);
-    void setFederacion(const char* f);
-    void setConfederacion(const char* c);
-    void setRanking(int r);
-    void setEstadisticas(int gf, int gc, int g, int e, int p);
+    // Setters
+    void setPais(const char* valor);
+    void setConfederacion(const char* valor);
+    void setDirectorTecnico(const char* valor);
+    void setRankingFIFA(int valor);
+    void setPuntos(int valor);
+    void setDiferenciaGoles(int valor);
 
-    //Actualizar estadisticas partido a partido//
-    void sumarGolAFavor();
-    void sumarGolEnContra();
-    void sumarGanado();
-    void sumarEmpatado();
-    void sumarPerdido();
+    // Funciones del diagrama
+    void agregarJugador(const jugador& j);
+    void generarPlantilla();
 
-    //JUGADORES//
-    void     agregarJugador(int index, const char* nombre, int numero);
-    Jugador& getJugador(int index);
-    int      getCantidadJugadores();
+    // CSV
+    void cargarDesdeCSV(const char* archivo);
 
-    //GETTERS//
-    const char* getNombre();
-    const char* getDirector();
-    const char* getFederacion();
-    const char* getConfederacion();
-    int getRanking();
-    int getGolesAFavor();
-    int getGolesEnContra();
-    int getGanados();
-    int getEmpatados();
-    int getPerdidos();
-
-
-    int getPuntos();
-    int getDiferenciaGoles();
-
-    //PERSISTENCIA//
-    static void cargarEquipos(Equipo equipos[], int& cantidad);
-    static void guardarDatos(Equipo equipos[], int cantidad);
-
-    //MOSTRAR//
-    void mostrarInfo();
-    void mostrarJugadores();
+    // Operadores
+    bool operator<(const equipo& otro) const;
+    friend std::ostream& operator<<(std::ostream& os, const equipo& e);
 };
 
 #endif
