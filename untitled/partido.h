@@ -34,6 +34,8 @@ public:
     int getGoles1();
     int getGoles2();
     Equipo* getGanador();
+    Equipo* getEquipo1();
+    Equipo* getEquipo2();
 
     void mostrarResultado();
 };

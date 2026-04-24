@@ -193,6 +193,9 @@ Equipo* Partido::getGanador() {
     return 0;
 }
 
+Equipo* Partido::getEquipo1() { return equipo1; }
+Equipo* Partido::getEquipo2() { return equipo2; }
+
 void Partido::mostrarResultado() {
     cout << equipo1->getNombre() << " " << goles1
          << " - " << goles2
