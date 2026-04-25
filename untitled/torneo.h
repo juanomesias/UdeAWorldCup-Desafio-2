@@ -1,10 +1,22 @@
 #ifndef TORNEO_H
 #define TORNEO_H
 
-class torneo
-{
+#include "Equipo.h"
+
+class Torneo {
+private:
+    Equipo* equipos;
+    int cantidadEquipos;
+
+    Equipo grupos[12][4];
+
 public:
-    torneo();
+    Torneo();
+    ~Torneo();
+
+    void cargarDatos();
+    void formarGrupos();
+    void mostrarGrupos();
 };
 
-#endif // TORNEO_H
+#endif

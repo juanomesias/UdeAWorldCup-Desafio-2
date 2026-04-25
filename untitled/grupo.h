@@ -8,7 +8,7 @@ class Grupo {
 private:
     char letra;
 
-    Equipo* equipos[4];
+    equipo* equipos[4];
     Partido* partidos[6];
 
     int puntos[4];
@@ -16,7 +16,7 @@ private:
 public:
     Grupo(char l);
 
-    void agregarEquipo(int index, Equipo* eq);
+    void agregarEquipo(int index, equipo* eq);
 
     void generarPartidos();
 
