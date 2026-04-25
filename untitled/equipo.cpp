@@ -1,193 +1,208 @@
-#include "equipo.h"
-#include <cstring>
 #include <iostream>
 #include <fstream>
-#include <sstream>
-#include <string>
+#include "Equipo.h"
 
 using namespace std;
 
-equipo::equipo() {
-    pais = new char[1]; pais[0] = '\0';
-    confederacion = new char[1]; confederacion[0] = '\0';
-    directorTecnico = new char[1]; directorTecnico[0] = '\0';
+// copiar cadena
+void Equipo::copiarCadena(char* dest, const char* src, int maxLen) {
+    int i = 0;
+    while (src[i] != '\0' && i < maxLen - 1) {
+        dest[i] = src[i];
+        i++;
+    }
+    dest[i] = '\0';
+}
+
+// constructor
+Equipo::Equipo() {
+    nombre[0] = '\0';
+    directorTecnico[0] = '\0';
+    federacion[0] = '\0';
+    confederacion[0] = '\0';
 
     rankingFIFA = 0;
-    plantilla = nullptr;
-    numJugadores = 0;
-    puntos = 0;
-    diferenciaGoles = 0;
+    golesAFavor = 0;
+    golesEnContra = 0;
+    partidosGanados = 0;
+    partidosEmpatados = 0;
+    partidosPerdidos = 0;
+
+    jugadores = nullptr;
+    cantidadJugadores = 0;
 }
 
-equipo::~equipo() {
-    delete[] pais;
-    delete[] confederacion;
-    delete[] directorTecnico;
-    delete[] plantilla;
+Equipo::Equipo(int n) {
+    nombre[0] = '\0';
+    directorTecnico[0] = '\0';
+    federacion[0] = '\0';
+    confederacion[0] = '\0';
+
+    rankingFIFA = 0;
+    golesAFavor = 0;
+    golesEnContra = 0;
+    partidosGanados = 0;
+    partidosEmpatados = 0;
+    partidosPerdidos = 0;
+
+    cantidadJugadores = n;
+    jugadores = new Jugador[n];
 }
 
-equipo::equipo(const equipo& otro) {
-    pais = new char[strlen(otro.pais)+1];
-    strcpy(pais, otro.pais);
-
-    confederacion = new char[strlen(otro.confederacion)+1];
-    strcpy(confederacion, otro.confederacion);
-
-    directorTecnico = new char[strlen(otro.directorTecnico)+1];
-    strcpy(directorTecnico, otro.directorTecnico);
+// copia
+Equipo::Equipo(const Equipo& otro) {
+    copiarCadena(nombre, otro.nombre, 50);
+    copiarCadena(directorTecnico, otro.directorTecnico, 50);
+    copiarCadena(federacion, otro.federacion, 100);
+    copiarCadena(confederacion, otro.confederacion, 50);
 
     rankingFIFA = otro.rankingFIFA;
-    puntos = otro.puntos;
-    diferenciaGoles = otro.diferenciaGoles;
-    numJugadores = otro.numJugadores;
+    golesAFavor = otro.golesAFavor;
+    golesEnContra = otro.golesEnContra;
+    partidosGanados = otro.partidosGanados;
+    partidosEmpatados = otro.partidosEmpatados;
+    partidosPerdidos = otro.partidosPerdidos;
 
-    plantilla = new jugador[numJugadores];
-    for(int i=0;i<numJugadores;i++)
-        plantilla[i] = otro.plantilla[i];
+    cantidadJugadores = otro.cantidadJugadores;
 
-    statsHistoricas = otro.statsHistoricas;
+    if (cantidadJugadores > 0) {
+        jugadores = new Jugador[cantidadJugadores];
+        for (int i = 0; i < cantidadJugadores; i++)
+            jugadores[i] = otro.jugadores[i];
+    } else {
+        jugadores = nullptr;
+    }
 }
 
-equipo& equipo::operator=(const equipo& otro) {
-    if(this != &otro){
-        delete[] pais;
-        delete[] confederacion;
-        delete[] directorTecnico;
-        delete[] plantilla;
+// asignación
+Equipo& Equipo::operator=(const Equipo& otro) {
+    if (this == &otro) return *this;
 
-        pais = new char[strlen(otro.pais)+1];
-        strcpy(pais, otro.pais);
+    delete[] jugadores;
 
-        confederacion = new char[strlen(otro.confederacion)+1];
-        strcpy(confederacion, otro.confederacion);
+    copiarCadena(nombre, otro.nombre, 50);
+    copiarCadena(directorTecnico, otro.directorTecnico, 50);
+    copiarCadena(federacion, otro.federacion, 100);
+    copiarCadena(confederacion, otro.confederacion, 50);
 
-        directorTecnico = new char[strlen(otro.directorTecnico)+1];
-        strcpy(directorTecnico, otro.directorTecnico);
+    rankingFIFA = otro.rankingFIFA;
+    golesAFavor = otro.golesAFavor;
+    golesEnContra = otro.golesEnContra;
+    partidosGanados = otro.partidosGanados;
+    partidosEmpatados = otro.partidosEmpatados;
+    partidosPerdidos = otro.partidosPerdidos;
 
-        rankingFIFA = otro.rankingFIFA;
-        puntos = otro.puntos;
-        diferenciaGoles = otro.diferenciaGoles;
-        numJugadores = otro.numJugadores;
+    cantidadJugadores = otro.cantidadJugadores;
 
-        plantilla = new jugador[numJugadores];
-        for(int i=0;i<numJugadores;i++)
-            plantilla[i] = otro.plantilla[i];
-
-        statsHistoricas = otro.statsHistoricas;
+    if (cantidadJugadores > 0) {
+        jugadores = new Jugador[cantidadJugadores];
+        for (int i = 0; i < cantidadJugadores; i++)
+            jugadores[i] = otro.jugadores[i];
+    } else {
+        jugadores = nullptr;
     }
+
     return *this;
 }
 
-// SETTERS
-void equipo::setPais(const char* v){
-    delete[] pais;
-    pais = new char[strlen(v)+1];
-    strcpy(pais,v);
+// destructor
+Equipo::~Equipo() {
+    delete[] jugadores;
 }
 
-void equipo::setConfederacion(const char* v){
-    delete[] confederacion;
-    confederacion = new char[strlen(v)+1];
-    strcpy(confederacion,v);
+// setters
+void Equipo::setNombre(const char* n) { copiarCadena(nombre, n, 50); }
+void Equipo::setDirector(const char* d) { copiarCadena(directorTecnico, d, 50); }
+void Equipo::setFederacion(const char* f) { copiarCadena(federacion, f, 100); }
+void Equipo::setConfederacion(const char* c) { copiarCadena(confederacion, c, 50); }
+void Equipo::setRanking(int r) { rankingFIFA = r; }
+
+void Equipo::setEstadisticas(int gf, int gc, int g, int e, int p) {
+    golesAFavor = gf;
+    golesEnContra = gc;
+    partidosGanados = g;
+    partidosEmpatados = e;
+    partidosPerdidos = p;
 }
 
-void equipo::setDirectorTecnico(const char* v){
-    delete[] directorTecnico;
-    directorTecnico = new char[strlen(v)+1];
-    strcpy(directorTecnico,v);
-}
-
-void equipo::setRankingFIFA(int v){ rankingFIFA = v; }
-
-// AGREGAR JUGADOR
-void equipo::agregarJugador(const jugador& j){
-    jugador* nuevo = new jugador[numJugadores+1];
-
-    for(int i=0;i<numJugadores;i++)
-        nuevo[i] = plantilla[i];
-
-    nuevo[numJugadores] = j;
-
-    delete[] plantilla;
-    plantilla = nuevo;
-    numJugadores++;
-}
-
-// GENERAR PLANTILLA
-void equipo::generarPlantilla(){
-    delete[] plantilla;
-
-    numJugadores = 26;
-    plantilla = new jugador[numJugadores];
-
-    for(int i=0;i<numJugadores;i++){
-        char nombre[20];
-        char apellido[20];
-
-        sprintf(nombre,"Jugador%d",i+1);
-        sprintf(apellido,"Apellido%d",i+1);
-
-        plantilla[i].setNombre(nombre);
-        plantilla[i].setApellido(apellido);
-        plantilla[i].setNumeroCamiseta(i+1);
+// jugadores
+void Equipo::agregarJugador(int index, const char* nom, int numero) {
+    if (index >= 0 && index < cantidadJugadores) {
+        jugadores[index].setNombre(nom);
+        jugadores[index].setNumeroCamiseta(numero);
     }
 }
 
+Jugador& Equipo::getJugador(int index) {
+    return jugadores[index];
+}
 
-void equipo::cargarDesdeCSV(const char* archivo){
-    ifstream file(archivo);
-    if(!file) return;
+int Equipo::getCantidadJugadores() {
+    return cantidadJugadores;
+}
 
-    string linea;
-    getline(file, linea); // encabezado
+// getters
+const char* Equipo::getNombre() { return nombre; }
+const char* Equipo::getDirector() { return directorTecnico; }
+const char* Equipo::getFederacion() { return federacion; }
+const char* Equipo::getConfederacion() { return confederacion; }
+int Equipo::getRanking() { return rankingFIFA; }
 
-    if(getline(file, linea)){
-        stringstream ss(linea);
-        string campo;
+int Equipo::getGolesAFavor() { return golesAFavor; }
+int Equipo::getGolesEnContra() { return golesEnContra; }
+int Equipo::getGanados() { return partidosGanados; }
+int Equipo::getEmpatados() { return partidosEmpatados; }
+int Equipo::getPerdidos() { return partidosPerdidos; }
 
-        getline(ss, campo, ',');
-        rankingFIFA = stoi(campo);
+int Equipo::getPuntos() {
+    return partidosGanados * 3 + partidosEmpatados;
+}
 
-        getline(ss, campo, ',');
-        setPais(campo.c_str());
+int Equipo::getDiferenciaGoles() {
+    return golesAFavor - golesEnContra;
+}
 
-        getline(ss, campo, ',');
-        setDirectorTecnico(campo.c_str());
+// CARGAR CSV
+void Equipo::cargarEquipos(Equipo equipos[], int& cantidad) {
+    ifstream archivo("equipos.csv");
 
-        getline(ss, campo, ','); // federacion
-
-        getline(ss, campo, ',');
-        setConfederacion(campo.c_str());
-
-        getline(ss, campo, ',');
-        statsHistoricas.golesFavor = stoi(campo);
-
-        getline(ss, campo, ',');
-        statsHistoricas.golesContra = stoi(campo);
-
-        getline(ss, campo, ',');
-        statsHistoricas.partidosGanados = stoi(campo);
-
-        getline(ss, campo, ',');
-        statsHistoricas.partidosEmpatados = stoi(campo);
-
-        getline(ss, campo, ',');
-        statsHistoricas.partidosPerdidos = stoi(campo);
+    if (!archivo.is_open()) {
+        cout << "Error abriendo equipos.csv\n";
+        cantidad = 0;
+        return;
     }
 
-    file.close();
-}
+    cantidad = 0;
 
-// OPERADORES
-bool equipo::operator<(const equipo& otro) const{
-    return rankingFIFA < otro.rankingFIFA;
-}
+    int ranking, gf, gc, g, e, p;
+    char nom[50], dt[50], fed[100], conf[50];
 
-ostream& operator<<(ostream& os, const equipo& e){
-    os<<"Pais: "<<e.pais
-       <<" | Ranking: "<<e.rankingFIFA
-       <<" | Confederacion: "<<e.confederacion
-       <<" | DT: "<<e.directorTecnico
-       <<" | Puntos: "<<e.puntos<<"\n";
-    return os;
+    while (archivo >> ranking) {
+        archivo.ignore();
+
+        archivo.getline(nom, 50, ',');
+        archivo.getline(dt, 50, ',');
+        archivo.getline(fed, 100, ',');
+        archivo.getline(conf, 50, ',');
+
+        archivo >> gf; archivo.ignore();
+        archivo >> gc; archivo.ignore();
+        archivo >> g; archivo.ignore();
+        archivo >> e; archivo.ignore();
+        archivo >> p;
+        archivo.ignore();
+
+        equipos[cantidad] = Equipo(26);
+
+        equipos[cantidad].setNombre(nom);
+        equipos[cantidad].setDirector(dt);
+        equipos[cantidad].setFederacion(fed);
+        equipos[cantidad].setConfederacion(conf);
+        equipos[cantidad].setRanking(ranking);
+        equipos[cantidad].setEstadisticas(gf, gc, g, e, p);
+
+        cantidad++;
+    }
+
+    archivo.close();
 }
