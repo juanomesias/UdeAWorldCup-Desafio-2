@@ -17,7 +17,7 @@ int main() {
     cout << "     Simulación de la fase de grupos" << endl;
     cout << "========================================" << endl;
     torneo.simularTorneo();
-    torneo.mostrarGrupos();
+    torneo.mostrarTablas();
 
     cout << "========================================" << endl;
     cout << "   Simulación de la fase eliminatoria" << endl;

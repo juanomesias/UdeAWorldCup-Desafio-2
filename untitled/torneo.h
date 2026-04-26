@@ -37,6 +37,7 @@ public:
     void simularTorneo();
     void simularEliminatorias();
     void mostrarGrupos();
+    void mostrarTablas();
 
     void clasificarR16(Equipo* clasificados[]);
     void generarR16(Equipo* clasificados[], Partido* partidosR16[]);

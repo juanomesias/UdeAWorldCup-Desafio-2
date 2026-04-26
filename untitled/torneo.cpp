@@ -105,6 +105,9 @@ bool Torneo::mismoGrupo(Equipo* a, Equipo* b) {
 
 void Torneo::cargarDatos() {
     Equipo::cargarEquipos(equipos, cantidadEquipos);
+    for (int i = 0; i < cantidadEquipos; i++) {
+        equipos[i].setEstadisticas(0, 0, 0, 0, 0);
+    }
 }
 
 void Torneo::formarGrupos() {
@@ -167,6 +170,40 @@ void Torneo::mostrarGrupos() {
     for (int i = 0; i < 12; i++) {
         grupos[i].mostrarGrupo();
         cout << endl;
+    }
+}
+
+void Torneo::mostrarTablas() {
+    cout << "\n===== TABLAS DE GRUPOS =====" << endl;
+
+    for (int i = 0; i < 12; i++) {
+
+        cout << "\nGrupo " << char('A' + i) << endl;
+        cout << "Pos | Equipo            | Pts | PJ | G | E | P | GF | GC | DG" << endl;
+
+        for (int j = 0; j < 4; j++) {
+
+            Equipo* e = grupos[i].getEquipoEnPosicion(j);
+
+            int pj = e->getGanados() + e->getEmpatados() + e->getPerdidos();
+
+            cout << j + 1 << "   | "
+                 << e->getNombre();
+
+            int len = 20 - strlen(e->getNombre());
+            for (int k = 0; k < len; k++) cout << " ";
+
+            cout << "| "
+                 << e->getPuntos() << "   | "
+                 << pj << "  | "
+                 << e->getGanados() << " | "
+                 << e->getEmpatados() << " | "
+                 << e->getPerdidos() << " | "
+                 << e->getGolesAFavor() << "  | "
+                 << e->getGolesEnContra() << "  | "
+                 << e->getDiferenciaGoles()
+                 << endl;
+        }
     }
 }
 
