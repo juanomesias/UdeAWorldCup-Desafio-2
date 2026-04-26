@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <cmath>
 #include "Partido.h"
 #include "Jugador.h"
 
@@ -78,7 +79,7 @@ int Partido::calcularGolesEsperados(Equipo* A, Equipo* B) {
     float beta = 0.4f;
     float mu = 1.35f;
 
-    float lambda = alpha * GF + beta * GC + mu;
+    float lambda = mu * pow((GF / mu), alpha) * pow((GC / mu), beta);
 
     int goles = (int)lambda;
 
@@ -255,9 +256,25 @@ Equipo* Partido::getEquipo1() { return equipo1; }
 Equipo* Partido::getEquipo2() { return equipo2; }
 
 void Partido::mostrarResultado() {
+    cout << "-----------------------------" << endl;
+    cout << "Fecha: " << fecha << "   hora: 00:00" <<endl;
+    cout << "Sede: " << sede << endl;
+
+    cout << "Arbitros: "
+         << arbitros[0] << ", "
+         << arbitros[1] << ", "
+         << arbitros[2] << endl;
+
+    cout << "Posesion: "
+         << equipo1->getNombre() << " "
+         << posesion1 << "% - "
+         << posesion2 << "% "
+         << equipo2->getNombre() << endl;
+
     cout << equipo1->getNombre() << " " << goles1
-         << " - " << goles2
-         << " " << equipo2->getNombre();
+         << " - " << goles2 << " "
+         << equipo2->getNombre();
+
     if (huboProrroga) {
         cout << " (prorroga)";
     }

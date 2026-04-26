@@ -35,17 +35,33 @@ int Torneo::generarRandom(int min, int max) {
 
 void Torneo::simularLlave(Equipo* entrada[], int n, Equipo* ganadores[], const char* nombreFase) {
     cout << "\n===== " << nombreFase << " =====" << endl;
+    int diaBase = 0;
+    if (strcmp(nombreFase, "R8") == 0) diaBase = 16;
+    else if (strcmp(nombreFase, "QF") == 0) diaBase = 20;
+    else diaBase = 25; // fallback por si acaso
 
     for (int i = 0; i < n; i += 2) {
-        Partido* p = new Partido(entrada[i], entrada[i + 1], "10/07/2026", "nombreSede");
-        p->setArbitros("codArbitro1", "codArbitro2", "codArbitro3");
+        int partidoIndex = i / 2;
+        int dia = diaBase + (partidoIndex / 4);
+        char fecha[20];
+        sprintf(fecha, "%02d/07/2026", dia);
+        Partido* p = new Partido(
+            entrada[i],
+            entrada[i + 1],
+            fecha,
+            "nombreSede"
+            );
+
+        p->setArbitros(
+            "codArbitro1",
+            "codArbitro2",
+            "codArbitro3"
+            );
         p->simular(true);
-
         p->mostrarResultado();
+        cout << "Hora: 00:00" << endl;
         p->mostrarGoleadores();
-
         ganadores[i / 2] = p->getGanador();
-
         delete p;
     }
 }
@@ -261,12 +277,10 @@ void Torneo::clasificarR16(Equipo* clasificados[]) {
 void Torneo::generarR16(Equipo* clasificados[], Partido* partidosR16[]) {
 
     int idx = 0;
-
+    int diaBase = 10;
     for (int i = 0; i < 32; i += 2) {
-
         Equipo* a = clasificados[i];
         Equipo* b = clasificados[i + 1];
-
         if (mismoGrupo(a, b)) {
             for (int j = i + 2; j < 32; j++) {
                 if (!mismoGrupo(a, clasificados[j])) {
@@ -279,7 +293,17 @@ void Torneo::generarR16(Equipo* clasificados[], Partido* partidosR16[]) {
             }
         }
 
-        partidosR16[idx++] = new Partido(a, b, "10/07/2026", "Sede");
+        int partidoIndex = idx;
+        int dia = diaBase + (partidoIndex / 4);
+        char fecha[20];
+        sprintf(fecha, "%02d/07/2026", dia);
+        partidosR16[idx] = new Partido(a, b, fecha, "nombreSede");
+        partidosR16[idx]->setArbitros(
+            "codArbitro1",
+            "codArbitro2",
+            "codArbitro3"
+            );
+        idx++;
     }
 }
 
@@ -320,7 +344,7 @@ void Torneo::simularEliminatorias() {
 
     cout << "\n===== SF =====" << endl;
     for (int i = 0; i < 4; i += 2) {
-        Partido* p = new Partido(semis[i], semis[i + 1], "10/07/2026", "nombreSede");
+        Partido* p = new Partido(semis[i], semis[i + 1], "23/07/2026", "nombreSede");
         p->setArbitros("codArbitro1", "codArbitro2", "codArbitro3");
         p->simular(true);
 
@@ -334,7 +358,7 @@ void Torneo::simularEliminatorias() {
     }
 
     cout << "\n===== TERCER PUESTO =====" << endl;
-    Partido* tercerPuesto = new Partido(perdedoresSF[0], perdedoresSF[1], "10/07/2026", "nombreSede");
+    Partido* tercerPuesto = new Partido(perdedoresSF[0], perdedoresSF[1], "26/07/2026", "nombreSede");
     tercerPuesto->setArbitros("codArbitro1", "codArbitro2", "codArbitro3");
     tercerPuesto->simular(true);
     tercerPuesto->mostrarResultado();
@@ -344,7 +368,7 @@ void Torneo::simularEliminatorias() {
     cuartoLugar = (tercerLugar == perdedoresSF[0]) ? perdedoresSF[1] : perdedoresSF[0];
 
     cout << "\n===== FINAL =====" << endl;
-    Partido* final = new Partido(finalistas[0], finalistas[1], "10/07/2026", "nombreSede");
+    Partido* final = new Partido(finalistas[0], finalistas[1], "26/07/2026", "nombreSede");
     final->setArbitros("codArbitro1", "codArbitro2", "codArbitro3");
     final->simular(true);
     final->mostrarResultado();
