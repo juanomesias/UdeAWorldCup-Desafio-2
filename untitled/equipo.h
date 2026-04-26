@@ -21,18 +21,15 @@ private:
     Jugador* jugadores;
     int cantidadJugadores;
 
-    // Funcion auxiliar interna para copiar cadenas sin usar strcpy
     void copiarCadena(char* dest, const char* src, int maxLen);
 
 public:
+    Equipo();
+    Equipo(int n);
+    Equipo(const Equipo& otro);
+    Equipo& operator=(const Equipo& otro);
+    ~Equipo();
 
-    Equipo();                               // Constructor por defecto (necesario para arrays)
-    Equipo(int n);                          // Constructor con cantidad de jugadores
-    Equipo(const Equipo& otro);             // Constructor de copia
-    Equipo& operator=(const Equipo& otro);  // Operador de asignacion
-    ~Equipo();                              // Destructor
-
-    //SETTERS//
     void setNombre(const char* n);
     void setDirector(const char* d);
     void setFederacion(const char* f);
@@ -40,39 +37,35 @@ public:
     void setRanking(int r);
     void setEstadisticas(int gf, int gc, int g, int e, int p);
 
-    //Actualizar estadisticas partido a partido//
     void sumarGolAFavor();
     void sumarGolEnContra();
     void sumarGanado();
     void sumarEmpatado();
     void sumarPerdido();
 
-    //JUGADORES//
-    void     agregarJugador(int index, const char* nombre, int numero);
-    Jugador& getJugador(int index);
-    int      getCantidadJugadores();
+    void agregarJugador(int index, const char* nom, int numero);
 
-    //GETTERS//
+    Jugador& getJugador(int index);
+    int getCantidadJugadores();
+
     const char* getNombre();
     const char* getDirector();
     const char* getFederacion();
     const char* getConfederacion();
     int getRanking();
+
     int getGolesAFavor();
     int getGolesEnContra();
     int getGanados();
     int getEmpatados();
     int getPerdidos();
 
-
     int getPuntos();
     int getDiferenciaGoles();
 
-    //PERSISTENCIA//
     static void cargarEquipos(Equipo equipos[], int& cantidad);
     static void guardarDatos(Equipo equipos[], int cantidad);
 
-    //MOSTRAR//
     void mostrarInfo();
     void mostrarJugadores();
 };

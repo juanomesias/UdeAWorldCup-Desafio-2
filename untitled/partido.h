@@ -8,6 +8,17 @@ private:
     Equipo* equipo1;
     Equipo* equipo2;
 
+    int convocados1[11];
+    int convocados2[11];
+
+    int goleadores1[11];
+    int goleadores2[11];
+
+    int cantGoleadores1;
+    int cantGoleadores2;
+
+    bool huboProrroga;
+
     int goles1;
     int goles2;
 
@@ -22,14 +33,15 @@ private:
     int generarRandom(int min, int max);
     float randomPorcentaje();
     void seleccionarConvocados(int seleccionados[], int total);
-    int calcularGolesEsperado(Equipo* A, Equipo* B);
+    int calcularGolesEsperados(Equipo* A, Equipo* B);
 
 public:
     Partido(Equipo* e1, Equipo* e2, const char* f, const char* s);
 
     void setArbitros(const char* a1, const char* a2, const char* a3);
 
-    void simular();
+    void simular(bool eliminatoria = false);
+    void mostrarGoleadores();
 
     int getGoles1();
     int getGoles2();

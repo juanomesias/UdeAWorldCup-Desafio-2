@@ -5,6 +5,7 @@ class Jugador {
 private:
     char nombre[50];
     int numeroCamiseta;
+
     int goles;
     int asistencias;
     int faltas;
@@ -14,47 +15,30 @@ private:
     int minutosJugados;
 
 public:
-    //CNST//
     Jugador();
-
-    //Constructor de copia//(Ultima actualizacion)
     Jugador(const Jugador& otro);
-
-    //Operador de asignacion//Ultima actualizacion)
     Jugador& operator=(const Jugador& otro);
 
-    //STTNMB//
     void setNombre(const char* n);
     void setNumeroCamiseta(int num);
 
-
-    //METDACTESTA//
     void anotarGol();
-    void recibirAmarilla();
-    void recibirRoja();
-    void jugarMinutos(int minutos);
     void darAsistencia();
     void cometerFalta();
     void jugarPartido();
+    void jugarMinutos(int minutos);
+    void recibirAmarilla();
+    void recibirRoja();
 
-    // Gttrs//
     const char* getNombre();
-    int getGoles();
-    int getAmarillas();
-    int getRojas();
-    int getMinutos();
     int getNumeroCamiseta();
+    int getGoles();
     int getAsistencias();
     int getFaltas();
     int getPartidos();
-
-
-    //Mstrinf//
-    void mostrarDatos();
-
-
+    int getAmarillas();
+    int getRojas();
+    int getMinutos();
 };
 
 #endif
-
-

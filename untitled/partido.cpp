@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "Partido.h"
+#include "Jugador.h"
 
 using namespace std;
 
@@ -14,6 +15,10 @@ Partido::Partido(Equipo* e1, Equipo* e2, const char* f, const char* s) {
 
     posesion1 = 0;
     posesion2 = 0;
+
+    cantGoleadores1 = 0;
+    cantGoleadores2 = 0;
+    huboProrroga = false;
 
     int i = 0;
     while (f[i] != '\0' && i < 19) {
@@ -84,21 +89,44 @@ int Partido::calcularGolesEsperados(Equipo* A, Equipo* B) {
     return goles;
 }
 
-void Partido::simular() {
+void Partido::simular(bool eliminatoria) {
     static bool init = false;
     if (!init) {
         srand(time(0));
         init = true;
     }
 
-    int convocados1[11];
-    int convocados2[11];
+    cantGoleadores1 = 0;
+    cantGoleadores2 = 0;
+    huboProrroga = false;
 
     seleccionarConvocados(convocados1, equipo1->getCantidadJugadores());
     seleccionarConvocados(convocados2, equipo2->getCantidadJugadores());
 
     goles1 = calcularGolesEsperados(equipo1, equipo2);
     goles2 = calcularGolesEsperados(equipo2, equipo1);
+
+    if (eliminatoria && goles1 == goles2) {
+        huboProrroga = true;
+
+        int r1 = equipo1->getRanking();
+        int r2 = equipo2->getRanking();
+        int total = r1 + r2;
+
+        if (total > 0) {
+            int sorteo = generarRandom(1, total);
+            if (sorteo <= r2) {
+                goles1++;
+            } else {
+                goles2++;
+            }
+        } else {
+            if (generarRandom(0, 1) == 0) goles1++;
+            else goles2++;
+        }
+    }
+
+    int minutos = huboProrroga ? 120 : 90;
 
     int r1 = equipo1->getRanking();
     int r2 = equipo2->getRanking();
@@ -110,8 +138,9 @@ void Partido::simular() {
 
     for (int i = 0; i < 11; i++) {
         Jugador& j = equipo1->getJugador(convocados1[i]);
-        j.jugarMinutos(90);
+        j.jugarMinutos(minutos);
         j.jugarPartido();
+
         if (randomPorcentaje() < 6.0f) {
             j.recibirAmarilla();
             if (randomPorcentaje() < 1.15f) {
@@ -132,8 +161,9 @@ void Partido::simular() {
 
     for (int i = 0; i < 11; i++) {
         Jugador& j = equipo2->getJugador(convocados2[i]);
-        j.jugarMinutos(90);
+        j.jugarMinutos(minutos);
         j.jugarPartido();
+
         if (randomPorcentaje() < 6.0f) {
             j.recibirAmarilla();
             if (randomPorcentaje() < 1.15f) {
@@ -154,12 +184,16 @@ void Partido::simular() {
 
     for (int i = 0; i < goles1; i++) {
         int idx = generarRandom(0, 10);
-        equipo1->getJugador(convocados1[idx]).anotarGol();
+        Jugador& j = equipo1->getJugador(convocados1[idx]);
+        j.anotarGol();
+        goleadores1[cantGoleadores1++] = j.getNumeroCamiseta();
     }
 
     for (int i = 0; i < goles2; i++) {
         int idx = generarRandom(0, 10);
-        equipo2->getJugador(convocados2[idx]).anotarGol();
+        Jugador& j = equipo2->getJugador(convocados2[idx]);
+        j.anotarGol();
+        goleadores2[cantGoleadores2++] = j.getNumeroCamiseta();
     }
 
     for (int i = 0; i < goles1; i++) {
@@ -184,13 +218,37 @@ void Partido::simular() {
     }
 }
 
+void Partido::mostrarGoleadores() {
+    cout << "Goleadores de " << equipo1->getNombre() << ": ";
+    if (cantGoleadores1 == 0) {
+        cout << "ninguno";
+    } else {
+        for (int i = 0; i < cantGoleadores1; i++) {
+            cout << goleadores1[i];
+            if (i + 1 < cantGoleadores1) cout << ", ";
+        }
+    }
+    cout << endl;
+
+    cout << "Goleadores de " << equipo2->getNombre() << ": ";
+    if (cantGoleadores2 == 0) {
+        cout << "ninguno";
+    } else {
+        for (int i = 0; i < cantGoleadores2; i++) {
+            cout << goleadores2[i];
+            if (i + 1 < cantGoleadores2) cout << ", ";
+        }
+    }
+    cout << endl;
+}
+
 int Partido::getGoles1() { return goles1; }
 int Partido::getGoles2() { return goles2; }
 
 Equipo* Partido::getGanador() {
     if (goles1 > goles2) return equipo1;
     if (goles2 > goles1) return equipo2;
-    return 0;
+    return nullptr;
 }
 
 Equipo* Partido::getEquipo1() { return equipo1; }
@@ -199,5 +257,10 @@ Equipo* Partido::getEquipo2() { return equipo2; }
 void Partido::mostrarResultado() {
     cout << equipo1->getNombre() << " " << goles1
          << " - " << goles2
-         << " " << equipo2->getNombre() << endl;
+         << " " << equipo2->getNombre();
+    if (huboProrroga) {
+        cout << " (prorroga)";
+    }
+
+    cout << endl;
 }

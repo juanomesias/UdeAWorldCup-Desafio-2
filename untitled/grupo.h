@@ -6,6 +6,8 @@
 
 class Grupo {
 private:
+    void ordenarTabla();
+
     char letra;
 
     Equipo* equipos[4];
@@ -15,6 +17,9 @@ private:
 
 public:
     Grupo(char l);
+    Grupo();
+    Equipo* getEquipo(int index);
+    Equipo* getEquipoEnPosicion(int pos);
 
     void agregarEquipo(int index, Equipo* eq);
 
@@ -25,6 +30,10 @@ public:
     void calcularTabla();
 
     void mostrarTabla();
+
+    void mostrarGrupo();
+
+    ~Grupo();
 };
 
 #endif

@@ -16,10 +16,35 @@ Grupo::Grupo(char l) {
     }
 }
 
+Grupo::Grupo() {
+    letra = '?';
+
+    for (int i = 0; i < 4; i++) {
+        equipos[i] = nullptr;
+        puntos[i] = 0;
+    }
+
+    for (int i = 0; i < 6; i++) {
+        partidos[i] = nullptr;
+    }
+}
+
 void Grupo::agregarEquipo(int index, Equipo* eq) {
     if (index >= 0 && index < 4) {
         equipos[index] = eq;
     }
+}
+
+Equipo* Grupo::getEquipo(int index) {
+    if (index >= 0 && index < 4)
+        return equipos[index];
+    return nullptr;
+}
+
+Equipo* Grupo::getEquipoEnPosicion(int pos) {
+    if (pos >= 0 && pos < 4)
+        return equipos[pos];
+    return nullptr;
 }
 
 void Grupo::generarPartidos() {
@@ -50,7 +75,6 @@ void Grupo::simularGrupo() {
 }
 
 void Grupo::calcularTabla() {
-    // Reiniciar puntos
     for (int i = 0; i < 4; i++) {
         puntos[i] = 0;
     }
@@ -130,5 +154,22 @@ void Grupo::mostrarTabla() {
              << " | DG: " << equipos[i]->getDiferenciaGoles()
              << " | GF: " << equipos[i]->getGolesAFavor()
              << endl;
+    }
+}
+
+void Grupo::mostrarGrupo() {
+    cout << "===== Grupo " << letra << " =====" << endl;
+    for (int i = 0; i < 4; i++) {
+        cout << i + 1 << ". "
+             << equipos[i]->getNombre()
+             << " | Confederacion: " << equipos[i]->getConfederacion()
+             << " | Ranking: " << equipos[i]->getRanking()
+             << endl;
+    }
+}
+
+Grupo::~Grupo() {
+    for (int i = 0; i < 6; i++) {
+        delete partidos[i];
     }
 }

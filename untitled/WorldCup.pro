@@ -1,19 +1,25 @@
 TEMPLATE = app
 TARGET = MiProyecto
-QT += core gui
+
+QT -= gui
+QT += core
+
 CONFIG += console
+CONFIG -= app_bundle
 
-SOURCES += main.cpp \
-    equipo.cpp \
-    grupo.cpp \
-           jugador.cpp \
-    partido.cpp \
-    torneo.cpp
+SOURCES += \
+    main.cpp \
+    Jugador.cpp \
+    Equipo.cpp \
+    Partido.cpp \
+    Grupo.cpp \
+    Torneo.cpp
 
-HEADERS += jugador.h \
-    equipo.h \
-    grupo.h \
-    partido.h \
-    torneo.h
+HEADERS += \
+    Jugador.h \
+    Equipo.h \
+    Partido.h \
+    Grupo.h \
+    Torneo.h
 
-QMAKE_POST_LINK += $$quote(cmd /c copy $$shell_path($$PWD/equipos.csv) $$shell_path($$OUT_PWD/equipos.csv))
+#QMAKE_POST_LINK += $$quote(cmd /c copy $$shell_path($$PWD/selecciones_clasificadas_mundial.csv) $$shell_path($$OUT_PWD/selecciones_clasificadas_mundial.csv))
