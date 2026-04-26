@@ -122,7 +122,7 @@ bool Torneo::mismoGrupo(Equipo* a, Equipo* b) {
 void Torneo::cargarDatos() {
     Equipo::cargarEquipos(equipos, cantidadEquipos);
     for (int i = 0; i < cantidadEquipos; i++) {
-        equipos[i].setEstadisticas(0, 0, 0, 0, 0);
+        equipos[i].reiniciarEstadisticasTorneo();
     }
 }
 
@@ -214,7 +214,9 @@ void Torneo::mostrarTablas() {
 
             Equipo* e = grupos[i].getEquipoEnPosicion(j);
 
-            int pj = e->getGanados() + e->getEmpatados() + e->getPerdidos();
+            int pj = e->getGanadosTorneo()
+                     + e->getEmpatadosTorneo()
+                     + e->getPerdidosTorneo();
 
             cout << j + 1 << "   | "
                  << e->getNombre();
@@ -223,14 +225,14 @@ void Torneo::mostrarTablas() {
             for (int k = 0; k < len; k++) cout << " ";
 
             cout << "| "
-                 << e->getPuntos() << "   | "
+                 << e->getPuntosTorneo() << "   | "
                  << pj << "  | "
-                 << e->getGanados() << " | "
-                 << e->getEmpatados() << " | "
-                 << e->getPerdidos() << " | "
-                 << e->getGolesAFavor() << "  | "
-                 << e->getGolesEnContra() << "  | "
-                 << e->getDiferenciaGoles()
+                 << e->getGanadosTorneo() << " | "
+                 << e->getEmpatadosTorneo() << " | "
+                 << e->getPerdidosTorneo() << " | "
+                 << e->getGolesAFavorTorneo() << "  | "
+                 << e->getGolesEnContraTorneo() << "  | "
+                 << e->getDiferenciaGolesTorneo()
                  << endl;
         }
     }

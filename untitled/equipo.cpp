@@ -132,6 +132,33 @@ void Equipo::agregarJugador(int index, const char* nom, int numero) {
         jugadores[index].setNumeroCamiseta(numero);
     }
 }
+//para las estadisticas del torneo
+void Equipo::reiniciarEstadisticasTorneo() {
+    golesAFavorTorneo = 0;
+    golesEnContraTorneo = 0;
+    partidosGanadosTorneo = 0;
+    partidosEmpatadosTorneo = 0;
+    partidosPerdidosTorneo = 0;
+}
+void Equipo::sumarGolAFavorTorneo() { golesAFavorTorneo++; }
+void Equipo::sumarGolEnContraTorneo() { golesEnContraTorneo++; }
+void Equipo::sumarGanadoTorneo() { partidosGanadosTorneo++; }
+void Equipo::sumarEmpatadoTorneo() { partidosEmpatadosTorneo++; }
+void Equipo::sumarPerdidoTorneo() { partidosPerdidosTorneo++; }
+int Equipo::getGolesAFavorTorneo() { return golesAFavorTorneo; }
+int Equipo::getGolesEnContraTorneo() { return golesEnContraTorneo; }
+int Equipo::getGanadosTorneo() { return partidosGanadosTorneo; }
+int Equipo::getEmpatadosTorneo() { return partidosEmpatadosTorneo; }
+int Equipo::getPerdidosTorneo() { return partidosPerdidosTorneo; }
+
+int Equipo::getPuntosTorneo() {
+    return partidosGanadosTorneo * 3 + partidosEmpatadosTorneo;
+}
+
+int Equipo::getDiferenciaGolesTorneo() {
+    return golesAFavorTorneo - golesEnContraTorneo;
+}
+//para las estadisticas del torneo
 
 Jugador& Equipo::getJugador(int index) {
     return jugadores[index];

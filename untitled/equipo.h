@@ -18,6 +18,12 @@ private:
     int partidosEmpatados;
     int partidosPerdidos;
 
+    int golesAFavorTorneo;
+    int golesEnContraTorneo;
+    int partidosGanadosTorneo;
+    int partidosEmpatadosTorneo;
+    int partidosPerdidosTorneo;
+
     Jugador* jugadores;
     int cantidadJugadores;
 
@@ -62,6 +68,23 @@ public:
 
     int getPuntos();
     int getDiferenciaGoles();
+
+    void reiniciarEstadisticasTorneo();
+
+    void sumarGolAFavorTorneo();
+    void sumarGolEnContraTorneo();
+    void sumarGanadoTorneo();
+    void sumarEmpatadoTorneo();
+    void sumarPerdidoTorneo();
+
+    int getGolesAFavorTorneo();
+    int getGolesEnContraTorneo();
+    int getGanadosTorneo();
+    int getEmpatadosTorneo();
+    int getPerdidosTorneo();
+
+    int getPuntosTorneo();
+    int getDiferenciaGolesTorneo();
 
     static void cargarEquipos(Equipo equipos[], int& cantidad);
     static void guardarDatos(Equipo equipos[], int cantidad);

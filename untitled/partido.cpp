@@ -198,21 +198,21 @@ void Partido::simular(bool eliminatoria) {
     }
 
     for (int i = 0; i < goles1; i++) {
-        equipo1->sumarGolAFavor();
-        equipo2->sumarGolEnContra();
+        equipo1->sumarGolAFavorTorneo();
+        equipo2->sumarGolEnContraTorneo();
     }
 
     for (int i = 0; i < goles2; i++) {
-        equipo2->sumarGolAFavor();
-        equipo1->sumarGolEnContra();
+        equipo2->sumarGolAFavorTorneo();
+        equipo1->sumarGolEnContraTorneo();
     }
 
     if (goles1 > goles2) {
-        equipo1->sumarGanado();
-        equipo2->sumarPerdido();
+        equipo1->sumarGanadoTorneo();
+        equipo2->sumarPerdidoTorneo();
     } else if (goles2 > goles1) {
-        equipo2->sumarGanado();
-        equipo1->sumarPerdido();
+        equipo2->sumarGanadoTorneo();
+        equipo1->sumarPerdidoTorneo();
     } else {
         equipo1->sumarEmpatado();
         equipo2->sumarEmpatado();

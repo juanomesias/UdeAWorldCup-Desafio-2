@@ -127,15 +127,16 @@ void Grupo::ordenarTabla() {
             if (puntos[j] < puntos[j + 1]) {
                 cambiar = true;
             } else if (puntos[j] == puntos[j + 1]) {
-                if (equipos[j]->getDiferenciaGoles() <
-                    equipos[j + 1]->getDiferenciaGoles()) {
+
+                if (equipos[j]->getDiferenciaGolesTorneo() <
+                    equipos[j + 1]->getDiferenciaGolesTorneo()) {
                     cambiar = true;
                 }
-                else if (equipos[j]->getDiferenciaGoles() ==
-                         equipos[j + 1]->getDiferenciaGoles()) {
+                else if (equipos[j]->getDiferenciaGolesTorneo() ==
+                         equipos[j + 1]->getDiferenciaGolesTorneo()) {
 
-                    if (equipos[j]->getGolesAFavor() <
-                        equipos[j + 1]->getGolesAFavor()) {
+                    if (equipos[j]->getGolesAFavorTorneo() <
+                        equipos[j + 1]->getGolesAFavorTorneo()) {
                         cambiar = true;
                     }
                 }
@@ -158,11 +159,17 @@ void Grupo::mostrarTabla() {
     cout << "===== Grupo " << letra << " =====" << endl;
 
     for (int i = 0; i < 4; i++) {
+
+        int pj = equipos[i]->getGanadosTorneo()
+        + equipos[i]->getEmpatadosTorneo()
+            + equipos[i]->getPerdidosTorneo();
+
         cout << i + 1 << ". "
              << equipos[i]->getNombre()
              << " | Pts: " << puntos[i]
-             << " | DG: " << equipos[i]->getDiferenciaGoles()
-             << " | GF: " << equipos[i]->getGolesAFavor()
+             << " | PJ: " << pj
+             << " | DG: " << equipos[i]->getDiferenciaGolesTorneo()
+             << " | GF: " << equipos[i]->getGolesAFavorTorneo()
              << endl;
     }
 }
