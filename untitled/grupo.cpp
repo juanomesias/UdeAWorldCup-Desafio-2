@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Grupo.h"
+#include <cstdio>
 
 using namespace std;
 
@@ -50,19 +51,28 @@ Equipo* Grupo::getEquipoEnPosicion(int pos) {
 void Grupo::generarPartidos() {
     int idx = 0;
 
+    static int partidoGlobal = 0;
+
     for (int i = 0; i < 4; i++) {
         for (int j = i + 1; j < 4; j++) {
+
+
+            int dia = 20 + (partidoGlobal / 4);
+
+            char fechaStr[20];
+            sprintf(fechaStr, "%02d/06/2026", dia);
 
             partidos[idx] = new Partido(
                 equipos[i],
                 equipos[j],
-                "20/06/2026",
-                "Sede"
+                fechaStr,
+                "nombreSede"
                 );
 
-            partidos[idx]->setArbitros("A1", "A2", "A3");
+            partidos[idx]->setArbitros("codArbitro1", "codArbitro2", "codArbitro3");
 
             idx++;
+            partidoGlobal++;
         }
     }
 }

@@ -112,8 +112,23 @@ void Torneo::cargarDatos() {
 
 void Torneo::formarGrupos() {
     ordenarPorRanking();
+
     Equipo* bombos[4][12];
+    bool usados[4][12] = {false};
+
     int index = 0;
+
+    for (int i = 0; i < cantidadEquipos; i++) {
+        if (strcmp(equipos[i].getNombre(), "United States") == 0) {
+
+            Equipo temp = equipos[0];
+            equipos[0] = equipos[i];
+            equipos[i] = temp;
+
+            break;
+        }
+    }
+
 
     for (int b = 0; b < 4; b++) {
         for (int i = 0; i < 12; i++) {
@@ -121,7 +136,6 @@ void Torneo::formarGrupos() {
         }
     }
 
-    bool usados[4][12] = {false};
 
     for (int g = 0; g < 12; g++) {
 
@@ -130,7 +144,6 @@ void Torneo::formarGrupos() {
             int intentos = 0;
 
             while (true) {
-
                 int r = generarRandom(0, 11);
 
                 if (usados[b][r]) continue;
