@@ -15,7 +15,7 @@ void Equipo::copiarCadena(char* dest, const char* src, int maxLen) {
 }
 
 // constructor
-Equipo::Equipo(int n) {
+Equipo::Equipo() {
     nombre[0] = '\0';
     directorTecnico[0] = '\0';
     federacion[0] = '\0';
@@ -34,8 +34,8 @@ Equipo::Equipo(int n) {
     partidosEmpatadosTorneo = 0;
     partidosPerdidosTorneo = 0;
 
-    cantidadJugadores = n;
-    jugadores = new Jugador[n];
+    jugadores = nullptr;
+    cantidadJugadores = 0;
 }
 
 Equipo::Equipo(int n) {
@@ -50,6 +50,12 @@ Equipo::Equipo(int n) {
     partidosGanados = 0;
     partidosEmpatados = 0;
     partidosPerdidos = 0;
+
+    golesAFavorTorneo = 0;
+    golesEnContraTorneo = 0;
+    partidosGanadosTorneo = 0;
+    partidosEmpatadosTorneo = 0;
+    partidosPerdidosTorneo = 0;
 
     cantidadJugadores = n;
     jugadores = new Jugador[n];
